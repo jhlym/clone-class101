@@ -6,16 +6,27 @@ export default class CartStore {
   items: item[] = [];
 
   /**
-   * @description 장바구니에 item을 추가합니다. 최대 3개까지 가능합니다.
+   * @returns boolean
+   */
+  check(): boolean {
+    if (this.items.length === 3) {
+      window.alert("장바구니에는 상품을 최대 3개까지 담을 수 있습니다.");
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * @description
+   * 장바구니에 item을 추가합니다.
+   * 장바구니에는 상품을 최대 3개까지 담을 수 있습니다.
    * @param  {item} item
    */
   @action
   add(item: item) {
-    if (this.items.length === 3) {
-      window.alert("최대 개수는 3개까지 가능합니다.");
-      return;
+    if (this.check()) {
+      this.items.push(item);
     }
-    this.items.push(item);
   }
 
   /**
