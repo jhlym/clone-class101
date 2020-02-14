@@ -19,6 +19,8 @@
     "@types/styled-components": "^4.4.3",
     "bootstrap": "^4.4.1",
     "emotion-theming": "^10.0.27",
+    "mobx": "^5.15.4",
+    "mobx-react-lite": "^1.5.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
