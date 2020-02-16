@@ -17,9 +17,9 @@ import {
 
 const ProductContainer = observer(() => {
   const { cartStore } = useStores();
-  const [activePage, setPage] = useState<any>(1);
+  const [activePage, setPage] = useState<number>(1);
 
-  const handlePageChange = (pageNumber: Number) => {
+  const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
   };
 
@@ -41,7 +41,7 @@ const ProductContainer = observer(() => {
           imgSrc={item.coverImage}
           title={item.title}
           price={item.price}
-          cart={cartStore.isCart(item)}
+          cart={cartStore.hasItem(item)}
           addCart={() => cartStore.add(item)}
           removeCart={() => cartStore.remove(item)}
         />
