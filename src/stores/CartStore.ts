@@ -1,9 +1,9 @@
 import { observable, action } from "mobx";
-import { item } from "../interfaces";
+import { CartItem, Item } from "../interfaces";
 
 export default class CartStore {
   @observable
-  items: item[] = [];
+  items: CartItem[] = [];
 
   /**
    * @returns boolean
@@ -20,38 +20,46 @@ export default class CartStore {
    * @description
    * 장바구니에 item을 추가합니다.
    * 장바구니에는 상품을 최대 3개까지 담을 수 있습니다.
-   * @param  {item} item
+   * @param  {Item} item
    */
   @action
-  add(item: item) {
+  add(item: Item) {
     if (this.check()) {
-      this.items.push(item);
+      this.items.push({
+        ...item,
+        count: 1
+      });
     }
   }
 
-  /**
-   * @description 장바구니에서 item을 삭제합니다.
-   * @param  {item} item
-   */
   @action
-  remove(item: item) {
+  remove(item: Item) {
     const index = this.getCartItemIndex(item);
     this.items.splice(index, 1);
   }
 
-  /**
-   * @param  {item} item
-   * @returns boolean
-   */
-  isCart(item: item): boolean {
+  @action
+  countUp(item: CartItem) {
+    const index = this.getCartItemIndex(item);
+    this.items[index].count += 1;
+  }
+
+  @action
+  countDown(item: CartItem) {
+    const index = this.getCartItemIndex(item);
+    if (this.items[index].count === 1) return;
+    this.items[index].count -= 1;
+  }
+
+  hasItem(item: Item): boolean {
     return this.getCartItemIndex(item) > -1;
   }
 
   /**
-   * @param  {item} item
+   * @param  {Item} item
    * @returns number 인덱스를 찾지 못하면 -1 반환
    */
-  getCartItemIndex(item: item): number {
+  getCartItemIndex(item: Item): number {
     return this.items.findIndex(cart => cart.id === item.id);
   }
 }

@@ -1,19 +1,14 @@
 * {
   font-family: "Spoqa Han Sans", "Sans-serif";
 }
-
-@media screen and (min-width: 990px) {
-  div#root {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-}
-
 html,
 body,
 div#root {
   height: 100%;
+}
+
+.text-align__center {
+  text-align: center;
 }
 
 .active {
