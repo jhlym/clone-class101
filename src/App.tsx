@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+
 // pages
 const ProductPage = React.lazy(() => import("./pages/ProductPage"));
 const CartPage = React.lazy(() => import("./pages/CartPage"));
@@ -9,9 +10,9 @@ const App = () => {
     <React.Suspense fallback={<div>Loading...</div>}>
       <BrowserRouter>
         <Switch>
-          <Route path={"/products"} component={ProductPage} exact />
+          <Route path="/products" component={ProductPage} exact />
           <Route path="/cart" component={CartPage} exact />
-          <Redirect to="/products" />
+          <Redirect to="/cart" />
         </Switch>
       </BrowserRouter>
     </React.Suspense>
