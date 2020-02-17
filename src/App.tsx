@@ -8,11 +8,11 @@ const CartPage = React.lazy(() => import("./pages/CartPage"));
 const App = () => {
   return (
     <React.Suspense fallback={<div>Loading...</div>}>
-      <BrowserRouter>
+      <BrowserRouter basename="clone-class101">
         <Switch>
           <Route path="/products" component={ProductPage} exact />
           <Route path="/cart" component={CartPage} exact />
-          <Redirect to="/cart" />
+          <Redirect to="/products" />
         </Switch>
       </BrowserRouter>
     </React.Suspense>

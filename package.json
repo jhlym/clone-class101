@@ -2,6 +2,7 @@
   "name": "clone-class101",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://jhlym.github.io/clone-class101",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
@@ -17,6 +18,7 @@
     "@types/reactstrap": "^8.4.1",
     "@types/styled-components": "^4.4.3",
     "bootstrap": "^4.4.1",
+    "gh-pages": "^2.2.0",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
     "react": "^16.12.0",
@@ -32,7 +34,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
