@@ -1,10 +1,11 @@
-import { observable, action } from "mobx";
-import { CartItem, Item } from "../interfaces";
+import { observable, action, computed, reaction } from "mobx";
+import { CartItem, Item, Coupon } from "../interfaces";
 
 export default class CartStore {
   @observable
   items: CartItem[] = [];
-
+  @observable
+  coupons: Coupon[] = [];
   /**
    * @returns boolean
    */
@@ -27,7 +28,8 @@ export default class CartStore {
     if (this.check()) {
       this.items.push({
         ...item,
-        count: 1
+        count: 1,
+        selected: false
       });
     }
   }
@@ -39,16 +41,83 @@ export default class CartStore {
   }
 
   @action
-  countUp(item: CartItem) {
-    const index = this.getCartItemIndex(item);
+  countUp(index: number) {
     this.items[index].count += 1;
   }
 
   @action
-  countDown(item: CartItem) {
-    const index = this.getCartItemIndex(item);
+  countDown(index: number) {
     if (this.items[index].count === 1) return;
     this.items[index].count -= 1;
+  }
+
+  @action
+  checkboxHandler(index: number) {
+    this.items[index].selected = !this.items[index].selected;
+  }
+
+  @action
+  allCheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    let flag = e.target.checked;
+    this.items.forEach(item => (item.selected = flag));
+  }
+
+  @action
+  setCoupons(coupons: Coupon[]) {
+    this.coupons = coupons.map(coupon => ({
+      ...coupon,
+      selected: false
+    }));
+  }
+
+  @action
+  handleCouponCheckbox(index: number) {
+    this.coupons[index].selected = !this.coupons[index].selected;
+  }
+
+  @computed
+  get totalPrice(): string {
+    // 쿠폰 사용 가능 총합
+    const useCouponItemTotal = this.items.reduce(
+      (sum: number = 0, item: CartItem) => {
+        if (item.availableCoupon !== false && item.selected)
+          return sum + item.price * item.count;
+        return sum;
+      },
+      0
+    );
+    // 쿠폰 사용 불가능 총합
+    const disuseCouponItemTotal = this.items.reduce(
+      (sum: number = 0, item: CartItem) => {
+        if (item.availableCoupon === false && item.selected)
+          return sum + item.price * item.count;
+        return sum;
+      },
+      0
+    );
+
+    // rate는 쿠폰 사용 가능 총합에 적용
+    const rateCouponIndex = this.coupons.findIndex(
+      coupon => coupon.type === "rate" && coupon.selected === true
+    );
+    // amount는 타입의 쿠폰은 그냥 조건 상관없이 총합에서 제외
+    const amountCouponIndex = this.coupons.findIndex(
+      coupon => coupon.type === "amount" && coupon.selected === true
+    );
+
+    let result = 0;
+    if (rateCouponIndex > -1 && useCouponItemTotal > 0) {
+      result = Math.floor(
+        useCouponItemTotal * (this.coupons[rateCouponIndex].discountRate || 1)
+      );
+    }
+
+    if (amountCouponIndex > -1 && useCouponItemTotal > 0) {
+      result -= this.coupons[amountCouponIndex].discountAmount || 0;
+    }
+
+    result += disuseCouponItemTotal;
+    return result.toLocaleString();
   }
 
   hasItem(item: Item): boolean {
