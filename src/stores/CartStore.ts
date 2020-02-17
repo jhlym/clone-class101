@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from "mobx";
+import { observable, action, computed } from "mobx";
 import { CartItem, Item, Coupon } from "../interfaces";
 
 export default class CartStore {
@@ -6,6 +6,7 @@ export default class CartStore {
   items: CartItem[] = [];
   @observable
   coupons: Coupon[] = [];
+
   /**
    * @returns boolean
    */
@@ -76,7 +77,7 @@ export default class CartStore {
   }
 
   @computed
-  get totalPrice(): string {
+  get totalPrice() {
     // 쿠폰 사용 가능 총합
     const useCouponItemTotal = this.items.reduce(
       (sum: number = 0, item: CartItem) => {
@@ -106,17 +107,21 @@ export default class CartStore {
     );
 
     let result = 0;
-    if (rateCouponIndex > -1 && useCouponItemTotal > 0) {
-      result = Math.floor(
-        useCouponItemTotal * (this.coupons[rateCouponIndex].discountRate || 1)
-      );
+    if (rateCouponIndex > -1) {
+      const rate = this.coupons[rateCouponIndex].discountRate || 0;
+      result =
+        useCouponItemTotal - Math.floor(useCouponItemTotal * (rate / 100));
+    } else {
+      result += useCouponItemTotal;
     }
 
-    if (amountCouponIndex > -1 && useCouponItemTotal > 0) {
+    if (amountCouponIndex > -1) {
       result -= this.coupons[amountCouponIndex].discountAmount || 0;
     }
 
     result += disuseCouponItemTotal;
+
+    if (result < 0) result = 0;
     return result.toLocaleString();
   }
 

@@ -14,13 +14,17 @@ const Wrapper = styled.div`
   margin-top: 50px;
   width: 60%;
 `;
+const Price = styled.h4`
+  margin-left: 10px;
+  color: ${props => props.theme.color.red[8]};
+`;
 
 const CartContainer = observer(() => {
   const { cartStore } = useStores();
 
   useEffect(() => {
     cartStore.setCoupons(coupons);
-  }, []);
+  }, [cartStore]);
 
   return (
     <CenterBox flexDirection="column">
@@ -41,8 +45,8 @@ const CartContainer = observer(() => {
       </Wrapper>
       <Wrapper>
         <CenterBox justifyConetent="flex-start">
-          <h4>총금액</h4>
-          <span>{cartStore.totalPrice}</span>
+          <h3>총금액</h3>
+          <Price>{cartStore.totalPrice}</Price>
         </CenterBox>
       </Wrapper>
     </CenterBox>
