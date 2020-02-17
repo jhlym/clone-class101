@@ -9,6 +9,7 @@ export interface Item {
 
 export interface CartItem extends Item {
   count: number;
+  selected: boolean;
 }
 
 export interface Coupon {
@@ -16,4 +17,5 @@ export interface Coupon {
   title: string;
   discountRate?: number;
   discountAmount?: number;
+  selected?: boolean;
 }
