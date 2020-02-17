@@ -6,7 +6,7 @@ import CartTable from "../components/Table/CartTable";
 import CouponTable from "../components/Table/CouponTable";
 // hooks
 import useStores from "../hooks/useStores";
-import { CenterBox, FloatBox } from "../components/Common/style";
+import { CenterBox } from "../components/Common/style";
 // mockup data
 import { coupons } from "../data";
 
@@ -40,10 +40,10 @@ const CartContainer = observer(() => {
         />
       </Wrapper>
       <Wrapper>
-        <FloatBox>
+        <CenterBox justifyConetent="flex-start">
           <h4>총금액</h4>
           <span>{cartStore.totalPrice}</span>
-        </FloatBox>
+        </CenterBox>
       </Wrapper>
     </CenterBox>
   );
