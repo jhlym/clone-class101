@@ -1,15 +1,18 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import { Container } from "reactstrap";
 import CartContainer from "../containers/CartContainer";
+import SideNav from "../components/Navbar/SideNav";
 
 const CartPage = () => {
   return (
     <Container>
-      <div>
-        <NavLink to="/products">Go Product page</NavLink>
-      </div>
       <CartContainer />
+      <SideNav
+        routes={[
+          { name: "Product", path: "/products" },
+          { name: "Cart", path: "/cart" }
+        ]}
+      />
     </Container>
   );
 };
